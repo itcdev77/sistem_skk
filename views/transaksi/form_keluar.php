@@ -7,16 +7,17 @@ hakAkses(['admin', 'user']);
     function submit(x) {
         if (x == 'add') {
             // Detail awal..
-            $('[name="nama"]').val("");
-            $('[name="tanggal"]').val("");
-            $('[name="lokasi_kerja"]').val("");
-            $('[name="pilih_total_station"]').val("");
-            $('[name="no_seri"]').val("");
-            $('[name="j_kalibrasi"]').val("");
+            $('[name="nama_pengemudi"]').val("");
+            $('[name="tggl_berangkat"]').val("");
+            $('[name="km_awal"]').val("");
+            $('[name="jenis_kendaraan"]').val("");
+            $('[name="tujuan_perjalanan"]').val("");
+            $('[name="nama_penumpang"]').val("");
+            $('[name="catatan"]').val("");
 
             // $('#barangModal .modal-title').html('Tambah Barang');
             $('[name="ubah"]').hide();
-            $('[name="input_total_station"]').show();
+            $('[name="input_skk"]').show();
         } else {
             $('#detailModal .modal-title').html('Detail Transaksi Price Per Unit');
 
@@ -76,13 +77,13 @@ hakAkses(['admin', 'user']);
 
                 <p>Silahkan Melengkapi Form Untuk Perjalanan Anda</p>
 
-                <form class="formcoba" action="<?= base_url(); ?>process/act_p2h.php" method="POST" enctype="multipart/form-data">
+                <form class="formcoba" action="<?= base_url(); ?>process/act_skk.php" method="POST" enctype="multipart/form-data">
 
                     <div class="form-group">
 
                         <label for="text">Nama Pengemudi<font color="Red">*</font></label>
 
-                        </select><select class="form-control select2" type="text" name="nama" id="pilih_total_station" required>
+                        </select><select class="form-control select2" type="text" name="nama_pengemudi" id="nama_pengemudi" required>
                             <?php
 
                             $sau = "SELECT * FROM user ORDER BY name ASC";
@@ -110,7 +111,7 @@ hakAkses(['admin', 'user']);
 
                         <label for="text">Tanggal Berangkat<font color="Red">*</font></label>
 
-                        <input class="form-control" type="datetime-local" name="tanggal" placeholder="Jawaban Anda" required />
+                        <input class="form-control" type="datetime-local" name="tggl_berangkat" placeholder="Jawaban Anda" required />
 
                     </div>
 
@@ -118,7 +119,7 @@ hakAkses(['admin', 'user']);
 
                         <label for="text">KM Awal<font color="Red">*</font></label>
 
-                        <input class="form-control" type="number" name="lokasi_kerja" placeholder="Jawaban Anda" required />
+                        <input class="form-control" type="number" name="km_awal" placeholder="Jawaban Anda" required />
 
                     </div>
 
@@ -126,7 +127,7 @@ hakAkses(['admin', 'user']);
 
                         <label for="text">Jenis Kendaraan<font color="Red">*</font></label>
 
-                        <input class="form-control" type="text" name="lokasi_kerja" placeholder="Jawaban Anda" required />
+                        <input class="form-control" type="text" name="jenis_kendaraan" placeholder="Jawaban Anda" required />
 
                     </div>
 
@@ -134,7 +135,7 @@ hakAkses(['admin', 'user']);
 
                         <label for="text">Tujuan Perjalanan<font color="Red">*</font></label>
 
-                        <input class="form-control" type="text" name="lokasi_kerja" placeholder="Jawaban Anda" required />
+                        <input class="form-control" type="text" name="tujuan_perjalanan" placeholder="Jawaban Anda" required />
 
                     </div>
 
@@ -142,47 +143,9 @@ hakAkses(['admin', 'user']);
 
                         <label for="text">Nama Penumpang<font color="Red">*</font></label>
 
-                        <textarea class="form-control" id="" rows="3"></textarea>
+                        <textarea name="nama_penumpang" class="form-control" id="" rows="3"></textarea>
 
                     </div>
-
-                    <!-- <div class="form-group">
-
-                        <label for="dep">Pilih Total Station<font color="Red">*</font> : </label>
-
-
-                        </select><select class="form-control" type="text" name="pilih_total_station" id="pilih_total_station" required>
-                            <?php
-
-                            $sau = "SELECT * FROM aset_survey ORDER BY nama_aset ASC";
-                            $query2 = mysqli_query($con, "$sau") or die('mysql_error');
-
-                            // Loop melalui hasil query dan membuat pilihan dropdown
-                            echo '<option value="">-- Pilih Total Station --</option>';
-                            while ($user_data = mysqli_fetch_array($query2)) {
-                                if ($user_data['tipe_alat'] == 'Total Station') :
-                                    echo '<option value="' . $user_data['nama_aset'] . '">' . $user_data['nama_aset'] . '</option>';
-                                endif;
-                            }
-
-                            echo 'error';
-
-                            ?>
-
-
-                        </select>
-
-                    </div> -->
-                    <!-- 
-                    <div class="form-group">
-
-                        <label for="text">S/N Alat<font color="Red">*</font></label>
-
-                        <input class="form-control" type="text" name="no_seri" id="no_seri" placeholder="Jawaban Anda" required readonly />
-
-                    </div> -->
-
-
 
                     <div class="form-group">
 
@@ -192,7 +155,7 @@ hakAkses(['admin', 'user']);
 
                     </div>
 
-                    <input type="submit" class="btn btn-dark btn-block alert_notif" name="input_total_station" value="Kirim" />
+                    <input type="submit" class="btn btn-dark btn-block alert_notif" name="input_skk" value="Kirim" />
 
                     <br><br><br><br><br>
 

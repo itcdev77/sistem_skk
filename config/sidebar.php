@@ -56,8 +56,8 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <a class="collapse-item <?= isset($r_skk) ? 'active' : ''; ?>" href="?r_skk">Report Surat Keluar</a>
                     <!-- <a class="collapse-item <?= isset($r_drone) ? 'active' : ''; ?>" href="?r_drone">Report Drone</a>
-                    <a class="collapse-item <?= isset($r_drone_rtk) ? 'active' : ''; ?>" href="?r_drone_rtk">Report Drone RTK</a>
-                    <a class="collapse-item <?= isset($r_gps) ? 'active' : ''; ?>" href="?r_gps">Report GPS Geodetic</a> -->
+                    <a class="collapse-item <?= isset($r_drone_rtk) ? 'active' : ''; ?>" href="?r_drone_rtk">Report Drone RTK</a> -->
+                    <!-- <a class="collapse-item <?= isset($r_gps) ? 'active' : ''; ?>" href="?r_gps">Report GPS Geodetic</a> -->
                 </div>
             </div>
         </li>

@@ -22,48 +22,14 @@
 
                     // var formattedPrice = 'Rp. ' + data.price;
 
-                    $('[name="idbarang"]').val(data.idbarang);
-                    $('[name="tggl"]').val(data.tggl);
-                    $('[name="tipe_alat"]').val(data.tipe_alat);
-                    $('[name="nama"]').val(data.nama);
-                    $('[name="cttn_atasan"]').val(data.cttn_atasan);
-
-                    // titik yang ada keteranganya
-                    $('[name="box_alat"]').val(data.box_alat);
-                    $('[name="bt_internal"]').val(data.bt_internal);
-                    $('[name="bt_charger"]').val(data.bt_charger);
-                    $('[name="extension"]').val(data.extension);
-                    $('[name="vertikal"]').val(data.vertikal);
-                    $('[name="horizontal"]').val(data.horizontal);
-                    $('[name="obyektif"]').val(data.obyektif);
-                    $('[name="okuler"]').val(data.okuler);
-                    $('[name="pengatur_fokus"]').val(data.pengatur_fokus);
-                    $('[name="clamp_vh"]').val(data.clamp_vh);
-                    $('[name="penggerak_halus_vh"]').val(data.penggerak_halus_vh);
-                    $('[name="lensa"]').val(data.lensa);
-                    $('[name="pengatur_fokus_sc"]').val(data.pengatur_fokus_sc);
-                    $('[name="nivo_tabung"]').val(data.nivo_tabung);
-                    $('[name="nivo_bulat"]').val(data.nivo_bulat);
-                    $('[name="sekrup_abc"]').val(data.sekrup_abc);
-                    $('[name="tombol_keypad"]').val(data.tombol_keypad);
-                    $('[name="laser"]').val(data.laser);
-                    $('[name="materal_roll"]').val(data.materal_roll);
-                    $('[name="tripod_statif"]').val(data.tripod_statif);
-                    $('[name="tribrach_aps"]').val(data.tribrach_aps);
-                    $('[name="stick"]').val(data.stick);
-                    $('[name="prisma_topo"]').val(data.prisma_topo);
-                    // $('[name="p_usb"]').val(data.p_usb);
-                    // $('[name="p_memory_card"]').val(data.p_memory_card);
-                    // $('[name="p_ci_battery"]').val(data.p_ci_battery);
-                    // $('[name="tribach"]').val(data.tribach);
-                    // $('[name="sekrup_abc"]').val(data.sekrup_abc);
-                    // $('[name="clamp"]').val(data.clamp);
-                    // $('[name="t_adaptor"]').val(data.t_adaptor);
-                    // $('[name="t_nivo_bulat"]').val(data.t_nivo_bulat);
-                    // $('[name="stick"]').val(data.stick);
+                    $('[name="iduser "]').val(data.iduser);
+                    $('[name="nama_pengemudi"]').val(data.nama_pengemudi);
+                    $('[name="tggl_berangkat"]').val(data.tggl_berangkat);
+                    $('[name="km_awal"]').val(data.km_awal);
+                    $('[name="jenis_kendaraan"]').val(data.jenis_kendaraan);
 
                     //catatan
-                    $('[name="keterangan"]').val(data.keterangan);
+                    // $('[name="keterangan"]').val(data.keterangan);
 
 
                 }
@@ -157,7 +123,7 @@
                     <tbody>
                         <?php
                         $n = 1;
-                        $query = mysqli_query($con, "SELECT * FROM total_station ORDER BY idbarang DESC") or die(mysqli_error($con));
+                        $query = mysqli_query($con, "SELECT * FROM tbl_skk ORDER BY iduser DESC") or die(mysqli_error($con));
 
                         if (mysqli_num_rows($query) > 0) {
                             while ($row = mysqli_fetch_array($query)) :
@@ -165,7 +131,55 @@
                         ?>
                                 <tr>
                                     <td><?= $n++ ?></td>
+                                    <td><?= $row['tggl_berangkat']; ?></td>
 
+                                    <td><?= $row['nama_pengemudi']; ?></td>
+                                    <td><?= $row['km_awal']; ?></td>
+                                    <td><?= $row['jenis_kendaraan']; ?></td>
+                                    <td><?= $row['tujuan_perjalanan']; ?></td>
+                                    <td><?= $row['nama_penumpang']; ?></td>
+                                    <td><?= $row['catatan']; ?></td>
+
+                                    <!-- Approval sistem -->
+
+                                    <?php if ($row['status'] == 'approved' && $_SESSION['lvl_skk'] != 'admin') : ?>
+
+                                        <!-- action untuk display detail transaksi -->
+                                        <td class="text-center" style="color: #65B741;"><i class="fas fa-check"></i></td>
+
+
+                                    <?php endif; ?>
+
+                                    <!-- status ketika sudah di approve -->
+                                    <?php if ($row['status'] == 'approved' && $_SESSION['lvl_skk'] == 'admin') : ?>
+
+                                        <!-- action untuk display detail transaksi -->
+                                        <td class="text-center" style="color: #65B741;"><i class="fas fa-check"></i></td>
+
+                                    <?php endif; ?>
+                                    <!--  -->
+
+                                    <!-- status untuk user ketika belum ada action  dari FA -->
+                                    <?php if ($row['status'] == NULL && $_SESSION['lvl_skk'] != 'admin') : ?>
+
+                                        <td class="text-center" style="color: orange;"><i class="fas fa-clock"></i> Pending</td>
+
+                                    <?php endif; ?>
+                                    <!--  -->
+
+                                    <!-- action ketika status masih pending dan approval untuk admin -->
+                                    <?php if ($row['status'] == NULL && $_SESSION['lvl_skk'] == 'admin') : ?>
+
+                                        <td class="text-center"><a class="btn btn-sm btn-circle btn-primary" href="#approve_split" data-toggle="modal" onclick="submit(<?= $row['iduser']; ?>)"><i class="fas fa-edit"></i></a></td>
+
+                                    <?php endif; ?>
+
+                                    <!-- info yang akan muncul ketika transaksi gagal -->
+                                    <?php if ($row['status'] == 'gagal') : ?>
+
+                                        <td class="text-center" style="color: red;"><i class="fas fa-times"></i> Di Tolak</td>
+
+                                    <?php endif; ?>
 
 
 
@@ -209,7 +223,6 @@
 
 
                                 <input type="hidden" name="idbarang" class="form-control">
-                                <!-- <input type="hidden" name="kode_budget" class="form-control"> -->
 
 
                                 <div class="row">
@@ -471,18 +484,65 @@
                 <!-- modal body -->
                 <div class="modal-body">
 
-                    <input type="hidden" name="idbarang" class="form-control">
-                    <input type="hidden" name="tggl" class="form-control">
-                    <input type="hidden" name="tipe_alat" class="form-control">
-                    <input type="hidden" name="nama" class="form-control">
-                    <!-- <input type="hidden" name="trans_price2" class="form-control"> -->
+                    <input type="hidden" name="iduser" class="form-control">
+                    <input type="hidden" name="approval_name" value="<?= strtoupper($_SESSION['nama']); ?>" class="form-control">
 
 
-                    <p class="text-center"><b>Silahkan pilih approve untuk setuju dan tolak untuk menolak P2H Total Station</b></p>
+                    <div class="row">
+                        <div class="col col-6">
+                            <label for="">Tanggal/Waktu</label>
+
+                            <li class="list-group-item">
+                                <div class="input-group">
+                                    <input type="text" class="form-control border-0" name="tggl_berangkat" readonly>
+                                </div>
+                            </li>
+                        </div>
+                        <div class="col col-6">
+                            <label for="">Nama Pengemudi</label>
+
+                            <li class="list-group-item ">
+                                <div class="input-group">
+                                    <input type="text" class="form-control border-0" name="nama_pengemudi" readonly>
+
+                                </div>
+                            </li>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col col-6">
+                            <label for="">KM Awal</label>
+
+                            <li class="list-group-item">
+                                <div class="input-group">
+                                    <input type="text" class="form-control border-0" name="km_awal" readonly>
+                                </div>
+                            </li>
+                        </div>
+                        <div class="col col-6">
+                            <label for="">Jenis Kendaraan</label>
+
+                            <li class="list-group-item ">
+                                <div class="input-group">
+                                    <input type="text" class="form-control border-0" name="jenis_kendaraan" readonly>
+                                </div>
+                            </li>
+                        </div>
+                    </div>
+
+
+                    <p class="text-center mt-3"><b>Silahkan pilih approve untuk setuju dan tolak untuk menolak perjalanan ini</b></p>
 
                     <div class="text-center">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="status" id="exampleRadios1" value="approved" checked>
+                            <?php if (strtoupper($_SESSION['dep']) == "ITC") : ?>
+                                <input class="form-check-input" type="radio" name="status" id="exampleRadios1" value="approved" checked>
+                            <?php endif; ?>
+                            <?php if (strtoupper($_SESSION['dep']) == "PRODEV") : ?>
+                                <input class="form-check-input" type="radio" name="status" id="exampleRadios1" value="prod_app" checked>
+                            <?php endif; ?>
                             <label class="form-check-label" for="exampleRadios1">
                                 Approved
                             </label>
@@ -510,7 +570,7 @@
                 <div class="modal-footer text-center">
 
                     <!-- <input type="submit" class="btn btn-danger" placeholder="test" data-bs-dismiss="modal"> -->
-                    <input class="btn btn-primary float-right" type="submit" name="ubah_stts_total_station">
+                    <input class="btn btn-success float-right" type="submit" name="appv_atasan">
 
                 </div>
 

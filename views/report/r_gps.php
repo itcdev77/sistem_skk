@@ -207,7 +207,7 @@
                                     <!-- action ketika status masih pending dan approval untuk admin -->
                                     <?php if ($row['status'] == NULL && $_SESSION['level'] == 'admin') : ?>
 
-                                        <td class="text-center"><a class="btn btn-sm btn-circle btn-primary" href="#approve_split" data-toggle="modal" onclick="submit(<?= $row['idbarang']; ?>)"><i class="fas fa-edit"></i></a></td>
+                                        <td class="text-center"><a class="btn btn-sm btn-circle btn-primary" href="#approve_split" data-toggle="modal" onclick="submit(<?= $row['iduser']; ?>)"><i class="fas fa-edit"></i></a></td>
 
                                     <?php endif; ?>
 
