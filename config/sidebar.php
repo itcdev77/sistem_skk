@@ -27,7 +27,7 @@
     <div class="sidebar-heading">
         Menu
     </div>
-    <?php if ($_SESSION['lvl_skk'] == 'admin' || $_SESSION['lvl_skk'] == 'user') : ?>
+    <?php if ($_SESSION['lvl_skk'] == 'admin' || $_SESSION['lvl_skk'] == 'user' || $_SESSION['lvl_skk'] == 'GA' || $_SESSION['lvl_skk'] == 'HOS' || $_SESSION['lvl_skk'] == 'GARDA') : ?>
         <!-- Nav Item - Pages Collapse Menu -->
 
         <!-- Nav Item - Pages Collapse Menu -->

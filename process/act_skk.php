@@ -19,6 +19,7 @@ if (isset($_POST['input_skk'])) {
     $h = $_POST['tujuan_perjalanan'];
     $i = $_POST['nama_penumpang'];
     $j = $_POST['catatan'];
+    $k = $_POST['dept'];
 
     // Cek apakah data sudah ada di database..
     $sql_check = "SELECT * FROM tbl_skk WHERE nama_pengemudi = '$a' AND tggl_berangkat = '$e' AND km_awal = '$f' AND jenis_kendaraan = '$g' AND tujuan_perjalanan = '$h' AND nama_penumpang = '$i'";
@@ -29,14 +30,14 @@ if (isset($_POST['input_skk'])) {
         echo "Data sudah ada di database.";
     } else {
         // Data belum ada, lakukan operasi insert
-        $sql_insert = "INSERT INTO tbl_skk (nama_pengemudi, tggl_berangkat, km_awal, jenis_kendaraan, tujuan_perjalanan, nama_penumpang, catatan) 
-        VALUES ('$a', '$e', '$f', '$g', '$h', '$i', '$j')";
+        $sql_insert = "INSERT INTO tbl_skk (nama_pengemudi, tggl_berangkat, km_awal, jenis_kendaraan, tujuan_perjalanan, nama_penumpang, catatan, dept) 
+        VALUES ('$a', '$e', '$f', '$g', '$h', '$i', '$j', '$k')";
 
         if ($con->query($sql_insert) === TRUE) {
             echo "Data berhasil dimasukkan.";
 
             // Kirim notifikasi ke Telegram
-            $message = "<b>Data baru telah dimasukkan:</b>\n\nNama Pengemudi:  <b>$a</b>\n\nTanggal Berangkat:  <b>$e</b>\n\nKm Awal:  <b>$f</b>\n\nJenis Kendaraan:  <b>$g</b>\n\nTujuan Perjalanan:  <b>$h</b>\n\nNama Penumpang:  <b>$i</b>\n\nCatatan:  <b>$j</b>";
+            $message = "<b>Data baru telah dimasukkan:</b>\n\nNama Pengemudi:  <b>$a</b> \n\nDepartemen:  <b>$k</b>\n\nTanggal Berangkat:  <b>$e</b>\n\nKm Awal:  <b>$f</b>\n\nJenis Kendaraan:  <b>$g</b>\n\nTujuan Perjalanan:  <b>$h</b>\n\nNama Penumpang:  <b>$i</b>\n\nCatatan:  <b>$j</b>";
 
             // API URL
             $apiURL = "https://api.telegram.org/bot$botToken/sendMessage";

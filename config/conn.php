@@ -14,6 +14,6 @@ $con = mysqli_connect($hostname, $username, $password, $database) or die(mysqli_
 $hostname   = "localhost";
 $username   = "root";
 $password   = "password";
-$database   = "scg1";
+$database   = "scg_test";
 
 $con2 = mysqli_connect($hostname, $username, $password, $database) or die(mysqli_error($con));

@@ -1,4 +1,4 @@
-<?php hakAkses(['admin', 'user']);
+<?php hakAkses(['admin', 'user', 'GA', 'HOS', 'GARDA']);
 ?>
 
 
@@ -20,12 +20,12 @@
                 dataType: 'json',
                 success: function(data) {
 
-                    // var formattedPrice = 'Rp. ' + data.price;
+                    // var running_number = data.no_surat + 4;
 
                     $('[name="iduser "]').val(data.iduser);
                     $('[name="nama_pengemudi"]').val(data.nama_pengemudi);
                     $('[name="tggl_berangkat"]').val(data.tggl_berangkat);
-                    $('[name="km_awal"]').val(data.km_awal);
+                    $('[name="no_surat"]').val(data.no_surat);
                     $('[name="jenis_kendaraan"]').val(data.jenis_kendaraan);
 
                     //catatan
@@ -106,6 +106,7 @@
                             <th width="1">NO</th>
                             <th width="100">Tanggal/Waktu</th>
                             <th width="100">Nama Pengemudi</th>
+                            <th width="100">Departemen</th>
                             <th width="100">KM Awal</th>
                             <th width="100">Jenis Kendaraan</th>
                             <th width="100">Tujuan Perjalanan</th>
@@ -129,61 +130,181 @@
                             while ($row = mysqli_fetch_array($query)) :
 
                         ?>
-                                <tr>
-                                    <td><?= $n++ ?></td>
-                                    <td><?= $row['tggl_berangkat']; ?></td>
+                                <?php if ($row['dept'] == strtoupper($_SESSION['dep'])) : ?>
 
-                                    <td><?= $row['nama_pengemudi']; ?></td>
-                                    <td><?= $row['km_awal']; ?></td>
-                                    <td><?= $row['jenis_kendaraan']; ?></td>
-                                    <td><?= $row['tujuan_perjalanan']; ?></td>
-                                    <td><?= $row['nama_penumpang']; ?></td>
-                                    <td><?= $row['catatan']; ?></td>
+                                    <tr>
+                                        <td><?= $n++ ?></td>
+                                        <td><?= $row['tggl_berangkat']; ?></td>
 
-                                    <!-- Approval sistem -->
+                                        <td><?= $row['nama_pengemudi']; ?></td>
+                                        <td><?= $row['dept']; ?></td>
+                                        <td><?= $row['km_awal']; ?></td>
+                                        <td><?= $row['jenis_kendaraan']; ?></td>
+                                        <td><?= $row['tujuan_perjalanan']; ?></td>
+                                        <td><?= $row['nama_penumpang']; ?></td>
+                                        <td><?= $row['catatan']; ?></td>
 
-                                    <?php if ($row['status'] == 'approved' && $_SESSION['lvl_skk'] != 'admin') : ?>
+                                        <!-- Approval sistem -->
 
-                                        <!-- action untuk display detail transaksi -->
+                                        <!-- <?php if ($row['status'] == 'approved_ats' && $_SESSION['lvl_skk'] == 'GA') : ?>
+
+
                                         <td class="text-center" style="color: #65B741;"><i class="fas fa-check"></i></td>
-
-
-                                    <?php endif; ?>
-
-                                    <!-- status ketika sudah di approve -->
-                                    <?php if ($row['status'] == 'approved' && $_SESSION['lvl_skk'] == 'admin') : ?>
-
-                                        <!-- action untuk display detail transaksi -->
-                                        <td class="text-center" style="color: #65B741;"><i class="fas fa-check"></i></td>
-
-                                    <?php endif; ?>
-                                    <!--  -->
-
-                                    <!-- status untuk user ketika belum ada action  dari FA -->
-                                    <?php if ($row['status'] == NULL && $_SESSION['lvl_skk'] != 'admin') : ?>
-
-                                        <td class="text-center" style="color: orange;"><i class="fas fa-clock"></i> Pending</td>
-
-                                    <?php endif; ?>
-                                    <!--  -->
-
-                                    <!-- action ketika status masih pending dan approval untuk admin -->
-                                    <?php if ($row['status'] == NULL && $_SESSION['lvl_skk'] == 'admin') : ?>
-
-                                        <td class="text-center"><a class="btn btn-sm btn-circle btn-primary" href="#approve_split" data-toggle="modal" onclick="submit(<?= $row['iduser']; ?>)"><i class="fas fa-edit"></i></a></td>
-
-                                    <?php endif; ?>
-
-                                    <!-- info yang akan muncul ketika transaksi gagal -->
-                                    <?php if ($row['status'] == 'gagal') : ?>
-
-                                        <td class="text-center" style="color: red;"><i class="fas fa-times"></i> Di Tolak</td>
-
-                                    <?php endif; ?>
+                                        <td class="text-center"><a class="btn btn-sm btn-circle btn-warning" href="#approve_ga" data-toggle="modal" onclick="submit(<?= $row['iduser']; ?>)"><i class="fas fa-edit"></i></a></td>
 
 
 
-                                </tr>
+                                    <?php endif; ?> -->
+
+
+                                        <!-- status hold -->
+                                        <?php if ($row['status'] == NULL && $_SESSION['lvl_skk'] != 'admin') : ?>
+
+                                            <td class="text-center" style="color: orange;"><i class="fas fa-clock"></i> Pending</td>
+
+                                        <?php endif; ?>
+
+                                        <?php if ($row['status'] == "approve_ats" && $_SESSION['lvl_skk'] != 'GA') : ?>
+
+                                            <td class="text-center" style="color: orange;"><i class="fas fa-clock"></i> Menunggu Approval <b>GA</b></td>
+
+                                        <?php endif; ?>
+
+                                        <?php if ($row['status'] == "approve_ga" && $_SESSION['lvl_skk'] != 'HOS') : ?>
+
+                                            <td class="text-center" style="color: orange;"><i class="fas fa-clock"></i> Menunggu Approval <b>Head of Site</b></td>
+
+                                        <?php endif; ?>
+
+                                        <?php if ($row['status'] == "approve_hos" && $_SESSION['lvl_skk'] != 'GARDA') : ?>
+
+                                            <td class="text-center" style="color: #65B741;"><i class="fas fa-check"></i> Lanjut Proses</td>
+
+                                        <?php endif; ?>
+                                        <!--  -->
+
+                                        <!-- action ketika status masih pending dan approval  -->
+                                        <?php if ($row['status'] == NULL && $_SESSION['lvl_skk'] == 'admin') : ?>
+
+                                            <td class="text-center"><a class="btn btn-sm btn-circle btn-primary" href="#approve_split" data-toggle="modal" onclick="submit(<?= $row['iduser']; ?>)"><i class="fas fa-edit"></i></a></td>
+
+                                        <?php endif; ?>
+
+                                        <?php if ($row['status'] == "approve_ats" && $_SESSION['lvl_skk'] == 'GA') : ?>
+
+                                            <td class="text-center"><a class="btn btn-sm btn-circle btn-primary" href="#approve_split" data-toggle="modal" onclick="submit(<?= $row['iduser']; ?>)"><i class="fas fa-edit"></i></a></td>
+
+                                        <?php endif; ?>
+
+                                        <?php if ($row['status'] == "approve_ga" && $_SESSION['lvl_skk'] == 'HOS') : ?>
+
+                                            <td class="text-center"><a class="btn btn-sm btn-circle btn-primary" href="#approve_split" data-toggle="modal" onclick="submit(<?= $row['iduser']; ?>)"><i class="fas fa-edit"></i></a></td>
+
+                                        <?php endif; ?>
+
+                                        <?php if ($row['status'] == "approve_hos" && $_SESSION['lvl_skk'] == 'GARDA') : ?>
+
+                                            <td class="text-center"><a class="btn btn-sm btn-circle btn-primary" href="#approve_split" data-toggle="modal" onclick="submit(<?= $row['iduser']; ?>)"><i class="fas fa-edit"></i></a></td>
+
+                                        <?php endif; ?>
+
+                                        <!-- info yang akan muncul ketika transaksi gagal -->
+                                        <?php if ($row['status'] == 'gagal') : ?>
+
+                                            <td class="text-center" style="color: red;"><i class="fas fa-times"></i> Di Tolak</td>
+
+                                        <?php endif; ?>
+
+
+
+                                    </tr>
+                                <?php endif; ?>
+
+
+
+                                <!-- table yang tampil pada GA Head of Site dan GARDA -->
+
+
+                                <?php if ($_SESSION['lvl_skk'] == 'HOS' || $_SESSION['lvl_skk'] == 'GA' || $_SESSION['lvl_skk'] == 'GARDA') : ?>
+
+                                    <tr>
+                                        <td><?= $n++ ?></td>
+                                        <td><?= $row['tggl_berangkat']; ?></td>
+
+                                        <td><?= $row['nama_pengemudi']; ?></td>
+                                        <td><?= $row['dept']; ?></td>
+                                        <td><?= $row['km_awal']; ?></td>
+                                        <td><?= $row['jenis_kendaraan']; ?></td>
+                                        <td><?= $row['tujuan_perjalanan']; ?></td>
+                                        <td><?= $row['nama_penumpang']; ?></td>
+                                        <td><?= $row['catatan']; ?></td>
+
+                                        <!-- Approval sistem -->
+
+
+                                        <!-- //status hold -->
+                                        <?php if ($row['status'] == NULL && $_SESSION['lvl_skk'] != 'admin') : ?>
+
+                                            <td class="text-center" style="color: orange;"><i class="fas fa-clock"></i> Pending</td>
+
+                                        <?php endif; ?>
+
+                                        <?php if ($row['status'] == "approve_ats" && $_SESSION['lvl_skk'] != 'GA') : ?>
+
+                                            <td class="text-center" style="color: orange;"><i class="fas fa-clock"></i> Menunggu Approval <b>GA</b></td>
+
+                                        <?php endif; ?>
+
+                                        <?php if ($row['status'] == "approve_ga" && $_SESSION['lvl_skk'] != 'HOS') : ?>
+
+                                            <td class="text-center" style="color: orange;"><i class="fas fa-clock"></i> Menunggu Approval <b>Head of Site</b></td>
+
+                                        <?php endif; ?>
+
+                                        <?php if ($row['status'] == "approve_hos" && $_SESSION['lvl_skk'] != 'GARDA') : ?>
+
+                                            <td class="text-center" style="color: #65B741;"><i class="fas fa-check"></i> Lanjut Proses</td>
+
+                                        <?php endif; ?>
+                                        <!--  -->
+
+                                        <!-- //action ketika status masih pending dan approval  -->
+                                        <?php if ($row['status'] == NULL && $_SESSION['lvl_skk'] == 'admin') : ?>
+
+                                            <td class="text-center"><a class="btn btn-sm btn-circle btn-primary" href="#approve_split" data-toggle="modal" onclick="submit(<?= $row['iduser']; ?>)"><i class="fas fa-edit"></i></a></td>
+
+                                        <?php endif; ?>
+
+                                        <?php if ($row['status'] == "approve_ats" && $_SESSION['lvl_skk'] == 'GA') : ?>
+
+                                            <td class="text-center"><a class="btn btn-sm btn-circle btn-primary" href="#approve_split" data-toggle="modal" onclick="submit(<?= $row['iduser']; ?>)"><i class="fas fa-edit"></i></a></td>
+
+                                        <?php endif; ?>
+
+                                        <?php if ($row['status'] == "approve_ga" && $_SESSION['lvl_skk'] == 'HOS') : ?>
+
+                                            <td class="text-center"><a class="btn btn-sm btn-circle btn-primary" href="#approve_split" data-toggle="modal" onclick="submit(<?= $row['iduser']; ?>)"><i class="fas fa-edit"></i></a></td>
+
+                                        <?php endif; ?>
+
+                                        <?php if ($row['status'] == "approve_hos" && $_SESSION['lvl_skk'] == 'GARDA') : ?>
+
+                                            <td class="text-center"><a class="btn btn-sm btn-circle btn-primary" href="#approve_split" data-toggle="modal" onclick="submit(<?= $row['iduser']; ?>)"><i class="fas fa-edit"></i></a></td>
+
+                                        <?php endif; ?>
+
+                                        <!-- info yang akan muncul ketika transaksi gagal -->
+                                        <?php if ($row['status'] == 'gagal') : ?>
+
+                                            <td class="text-center" style="color: red;"><i class="fas fa-times"></i> Di Tolak</td>
+
+                                        <?php endif; ?>
+
+
+
+                                    </tr>
+                                <?php endif; ?>
+
                         <?php
                             // endif;
                             endwhile;
@@ -205,8 +326,176 @@
 
 
 
+<!-- Modal -->
+
+<!-- modal approval atasan -->
+
+<div class="modal fade" id="approve_split" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form action="<?= base_url(); ?>process/act_upd_stts.php" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <!-- modal body -->
+                <div class="modal-body">
+
+                    <input type="hidden" name="iduser" class="form-control">
+                    <input type="hidden" name="approval_name" value="<?= strtoupper($_SESSION['nama']); ?>" class="form-control">
+
+
+                    <div class="row">
+                        <div class="col col-6">
+                            <label for="">Tanggal/Waktu</label>
+
+                            <li class="list-group-item">
+                                <div class="input-group">
+                                    <input type="text" class="form-control border-0" name="tggl_berangkat" readonly>
+                                </div>
+                            </li>
+                        </div>
+                        <div class="col col-6">
+                            <label for="">Nama Pengemudi</label>
+
+                            <li class="list-group-item ">
+                                <div class="input-group">
+                                    <input type="text" class="form-control border-0" name="nama_pengemudi" readonly>
+
+                                </div>
+                            </li>
+                        </div>
+                    </div>
+
+                    <?php if (strtoupper($_SESSION['lvl_skk']) == "GA") : ?>
+
+
+                        <div class="row">
+                            <div class="col col-6">
+                                <label for="">Nomor Surat</label>
+
+                                <li class="list-group-item">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control border-0" name="no_surat" readonly>
+                                    </div>
+                                </li>
+                            </div>
+                            <div class="col col-6">
+                                <label for="">Jenis Kendaraan</label>
+
+                                <li class="list-group-item ">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control border-0" name="jenis_kendaraan">
+                                    </div>
+                                </li>
+                            </div>
+                        </div>
+
+                    <?php endif; ?>
+
+
+                    <?php if (strtoupper($_SESSION['lvl_skk']) == "GARDA") : ?>
+
+                        <div class="row mt-3">
+                            <div class="col col-6">
+                                <label for="">KM Awal</label>
+
+                                <li class="list-group-item">
+                                    <div class="input-group">
+                                        <input type="number" class="form-control border-0" name="km_awal">
+                                    </div>
+                                </li>
+                            </div>
+                            <div class="col col-6">
+                                <label for="">Km Akhir</label>
+
+                                <li class="list-group-item ">
+                                    <div class="input-group">
+                                        <input type="number" class="form-control border-0" name="km_akhir">
+                                    </div>
+                                </li>
+                            </div>
+                        </div>
+
+                    <?php endif; ?>
+
+
+                    <p class="text-center mt-3"><b>Silahkan pilih approve untuk setuju dan tolak untuk menolak perjalanan ini</b></p>
+
+                    <div class="text-center">
+
+                        <div class="form-check">
+
+                            <!-- Approval untuk atasan -->
+                            <?php if (strtoupper($_SESSION['lvl_skk']) != "GA" && strtoupper($_SESSION['lvl_skk']) != "HOS" && strtoupper($_SESSION['lvl_skk']) != "GARDA") : ?>
+                                <input class="form-check-input" type="radio" name="status" id="exampleRadios1" value="approve" checked>
+                            <?php endif; ?>
+                            <!--  -->
+
+                            <!-- Approval untuk GA -->
+                            <?php if (strtoupper($_SESSION['lvl_skk']) == "GA") : ?>
+                                <input class="form-check-input" type="radio" name="status" id="exampleRadios1" value="approve_ga" checked>
+                            <?php endif; ?>
+                            <!--  -->
+
+                            <!-- Approval untuk Head of Site -->
+                            <?php if (strtoupper($_SESSION['lvl_skk']) == "HOS") : ?>
+                                <input class="form-check-input" type="radio" name="status" id="exampleRadios1" value="approve_hos" checked>
+                            <?php endif; ?>
+                            <!--  -->
+
+                            <!-- Approval untuk Security -->
+                            <?php if (strtoupper($_SESSION['lvl_skk']) == "GARDA") : ?>
+                                <input class="form-check-input" type="radio" name="status" id="exampleRadios1" value="approve_garda" checked>
+                            <?php endif; ?>
+                            <!--  -->
+
+                            <label class="form-check-label" for="exampleRadios1">
+                                Approved
+                            </label>
+
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="status" id="exampleRadios2" value="gagal">
+                            <label class="form-check-label" for="exampleRadios2">
+                                Tolak
+                            </label>
+                        </div>
+
+                    </div>
+
+                    <label class="mt-2" for="">Catatan (Optional)</label>
+                    <li class="list-group-item">
+                        <div class="input-group">
+
+                            <input type="text" class="form-control border-0" name="cttn_atasan" id="cttn_atasan">
+                        </div>
+                    </li>
+
+
+                </div>
+
+                <div class="modal-footer text-center">
+
+                    <!-- <input type="submit" class="btn btn-danger" placeholder="test" data-bs-dismiss="modal"> -->
+                    <input class="btn btn-success float-right" type="submit" name="appv_atasan">
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
 <!-- modal yang hanya bisa melihat detail -->
-<div class="modal fade" id="detailModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+<!-- <div class="modal fade" id="detailModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <form action="<?= base_url(); ?>process/act_prodev.php" method="post">
@@ -466,115 +755,4 @@
             </form>
         </div>
     </div>
-</div>
-
-
-<!-- modal approval admin -->
-
-<div class="modal fade" id="approve_split" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <form action="<?= base_url(); ?>process/act_upd_stts.php" method="post">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"></h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <!-- modal body -->
-                <div class="modal-body">
-
-                    <input type="hidden" name="iduser" class="form-control">
-                    <input type="hidden" name="approval_name" value="<?= strtoupper($_SESSION['nama']); ?>" class="form-control">
-
-
-                    <div class="row">
-                        <div class="col col-6">
-                            <label for="">Tanggal/Waktu</label>
-
-                            <li class="list-group-item">
-                                <div class="input-group">
-                                    <input type="text" class="form-control border-0" name="tggl_berangkat" readonly>
-                                </div>
-                            </li>
-                        </div>
-                        <div class="col col-6">
-                            <label for="">Nama Pengemudi</label>
-
-                            <li class="list-group-item ">
-                                <div class="input-group">
-                                    <input type="text" class="form-control border-0" name="nama_pengemudi" readonly>
-
-                                </div>
-                            </li>
-                        </div>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col col-6">
-                            <label for="">KM Awal</label>
-
-                            <li class="list-group-item">
-                                <div class="input-group">
-                                    <input type="text" class="form-control border-0" name="km_awal" readonly>
-                                </div>
-                            </li>
-                        </div>
-                        <div class="col col-6">
-                            <label for="">Jenis Kendaraan</label>
-
-                            <li class="list-group-item ">
-                                <div class="input-group">
-                                    <input type="text" class="form-control border-0" name="jenis_kendaraan" readonly>
-                                </div>
-                            </li>
-                        </div>
-                    </div>
-
-
-                    <p class="text-center mt-3"><b>Silahkan pilih approve untuk setuju dan tolak untuk menolak perjalanan ini</b></p>
-
-                    <div class="text-center">
-                        <div class="form-check">
-                            <?php if (strtoupper($_SESSION['dep']) == "ITC") : ?>
-                                <input class="form-check-input" type="radio" name="status" id="exampleRadios1" value="approved" checked>
-                            <?php endif; ?>
-                            <?php if (strtoupper($_SESSION['dep']) == "PRODEV") : ?>
-                                <input class="form-check-input" type="radio" name="status" id="exampleRadios1" value="prod_app" checked>
-                            <?php endif; ?>
-                            <label class="form-check-label" for="exampleRadios1">
-                                Approved
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="status" id="exampleRadios2" value="gagal">
-                            <label class="form-check-label" for="exampleRadios2">
-                                Tolak
-                            </label>
-                        </div>
-
-                    </div>
-
-                    <label class="mt-2" for="">Catatan (Optional)</label>
-                    <li class="list-group-item">
-                        <div class="input-group">
-
-                            <input type="text" class="form-control border-0" name="cttn_atasan" id="cttn_atasan">
-                        </div>
-                    </li>
-
-
-                </div>
-
-                <div class="modal-footer text-center">
-
-                    <!-- <input type="submit" class="btn btn-danger" placeholder="test" data-bs-dismiss="modal"> -->
-                    <input class="btn btn-success float-right" type="submit" name="appv_atasan">
-
-                </div>
-
-            </form>
-        </div>
-    </div>
-</div>
+</div> -->

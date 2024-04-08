@@ -1,5 +1,4 @@
-<?php
-hakAkses(['admin', 'user']);
+<?php hakAkses(['admin', 'user', 'GA', 'HOS', 'GARDA']);
 ?>
 
 
@@ -8,6 +7,7 @@ hakAkses(['admin', 'user']);
         if (x == 'add') {
             // Detail awal..
             $('[name="nama_pengemudi"]').val("");
+            $('[name="dept"]').val("");
             $('[name="tggl_berangkat"]').val("");
             $('[name="km_awal"]').val("");
             $('[name="jenis_kendaraan"]').val("");
@@ -37,18 +37,18 @@ hakAkses(['admin', 'user']);
 
                     // var formattedPrice = 'Rp. ' + data.price;
 
-                    $('[name="idbarang"]').val(data.idbarang);
-                    $('[name="merek_id"]').val(data.merek_id).trigger('change');
-                    $('[name="kategori_id"]').val(data.kategori_id).trigger('change');
-                    $('[name="deskripsi"]').val(data.deskripsi);
-                    $('[name="price"]').val(data.price);
-                    $('[name="stok"]').val(data.stok);
-                    $('[name="kode_budget"]').val(data.kode_budget);
-                    $('[name="ket"]').val(data.ket);
-                    $('[name="departemen"]').val(data.departemen);
-                    $('[name="stok_upd"]').val(data.stok_upd);
-                    $('[name="di_ambil"]').val(data.di_ambil);
-                    $('[name="waktu_trnsk"]').val(data.waktu_trnsk);
+                    // $('[name="idbarang"]').val(data.idbarang);
+                    // $('[name="merek_id"]').val(data.merek_id).trigger('change');
+                    // $('[name="kategori_id"]').val(data.kategori_id).trigger('change');
+                    // $('[name="deskripsi"]').val(data.deskripsi);
+                    // $('[name="price"]').val(data.price);
+                    // $('[name="stok"]').val(data.stok);
+                    // $('[name="kode_budget"]').val(data.kode_budget);
+                    // $('[name="ket"]').val(data.ket);
+                    // $('[name="departemen"]').val(data.departemen);
+                    // $('[name="stok_upd"]').val(data.stok_upd);
+                    // $('[name="di_ambil"]').val(data.di_ambil);
+                    // $('[name="waktu_trnsk"]').val(data.waktu_trnsk);
 
                     //split budget
                     // $('[name="split"]').val(data.split);
@@ -78,6 +78,10 @@ hakAkses(['admin', 'user']);
                 <p>Silahkan Melengkapi Form Untuk Perjalanan Anda</p>
 
                 <form class="formcoba" action="<?= base_url(); ?>process/act_skk.php" method="POST" enctype="multipart/form-data">
+
+
+                    <input class="form-control" type="text" name="dept" value="<?= strtoupper($_SESSION['dep']); ?>" hidden />
+
 
                     <div class="form-group">
 
@@ -115,7 +119,7 @@ hakAkses(['admin', 'user']);
 
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
 
                         <label for="text">KM Awal<font color="Red">*</font></label>
 
@@ -129,7 +133,7 @@ hakAkses(['admin', 'user']);
 
                         <input class="form-control" type="text" name="jenis_kendaraan" placeholder="Jawaban Anda" required />
 
-                    </div>
+                    </div> -->
 
                     <div class="form-group">
 
@@ -149,7 +153,7 @@ hakAkses(['admin', 'user']);
 
                     <div class="form-group">
 
-                        <label for="nik">Catatan</label>
+                        <label for="nik">Catatan <i>(Optional)</i></label>
 
                         <input class="form-control" type="text" name="catatan" placeholder="Jawaban Anda" />
 
