@@ -112,7 +112,7 @@ $now = date('Y-m-d'); ?>
 
     <center>
         <h3 class="card-header section-title">
-            Statistik Total Station </h3>
+            Statistik Sistem SKK </h3>
     </center><br>
 
     <div class="row">
