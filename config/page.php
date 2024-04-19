@@ -112,6 +112,9 @@ else if (isset($_GET['r_drone'])) {
 } else if (isset($_GET['ex_total_station'])) {
     $report = $ex_total_station = true;
     $views = 'views/report/ex_total_station.php';
+} else if (isset($_GET['skk_print'])) {
+    $report = $skk_print = true;
+    $views = 'views/report/skk_print.php';
 }
 
 

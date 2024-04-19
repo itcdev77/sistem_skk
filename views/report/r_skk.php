@@ -6,10 +6,24 @@
     function submit(x) {
         if (x == 'add') {
             // kosong
+
+
         } else {
-            $('#detailModal .modal-title').html('Detail Transaksi Split Budget');
+            $('#detailModal .modal-title').html('#');
+
+
+
+            // $('[name="status"]').val("");
+            // $('[name="test"]').val("");
+
+            // $('[name="wkt_apv_ats"]').val("");
+            // $('[name="wkt_apv_ga"]').val("");
+            // $('[name="wkt_apv_hos"]').val("");
+            // $('[name="wkt_apv_garda"]').val("");
+
+
             $('[name="tambah"]').hide();
-            $('[name="ubah"]').show();
+            $('[name="update"]').show();
 
             $.ajax({
                 type: "POST",
@@ -27,6 +41,15 @@
                     $('[name="tggl_berangkat"]').val(data.tggl_berangkat);
                     $('[name="no_surat"]').val(data.no_surat);
                     $('[name="jenis_kendaraan"]').val(data.jenis_kendaraan);
+                    // $('[name="status"]').val(data.jenis_kendaraan);
+
+                    // tanggal approve
+
+                    // $('[name="wkt_apv_ats"]').val(data.wkt_apv_ats);
+                    // $('[name="wkt_apv_ga"]').val(data.wkt_apv_ga);
+                    // $('[name="wkt_apv_hos"]').val(data.wkt_apv_hos);
+                    // $('[name="wkt_apv_garda"]').val(data.wkt_apv_garda);
+
 
                     //catatan
                     // $('[name="keterangan"]').val(data.keterangan);
@@ -37,6 +60,9 @@
         }
     }
 </script>
+
+
+
 
 
 <!-- Begin Page Content -->
@@ -115,6 +141,7 @@
 
 
                             <th width="10" class="text-center">ACTION/STATUS</th>
+                            <th width="10" class="text-center">CETAK</th>
 
                             <!-- <?php if ($_SESSION['level'] == 'admin') : ?>
                             <?php endif; ?> -->
@@ -198,7 +225,7 @@
 
                                         <?php if ($row['status'] == "approve_ga" && $_SESSION['lvl_skk'] == 'HOS') : ?>
 
-                                            <td class="text-center"><a class="btn btn-sm btn-circle btn-primary" href="#approve_split" data-toggle="modal" onclick="submit(<?= $row['iduser']; ?>)"><i class="fas fa-edit"></i></a></td>
+                                            <td class="text-center"><a class="btn btn-sm btn-circle btn-primary" href="#approval_split" data-toggle="modal" onclick="submit(<?= $row['iduser']; ?>)"><i class="fas fa-edit"></i></a></td>
 
                                         <?php endif; ?>
 
@@ -214,6 +241,28 @@
                                             <td class="text-center" style="color: red;"><i class="fas fa-times"></i> Di Tolak</td>
 
                                         <?php endif; ?>
+
+
+                                        <!-- page untuk cetak barang -->
+                                        <!-- <form action="<?= base_url(); ?>process/skk_print.php?id=<?= $_SESSION['iduser']; ?>" method="post" target="_blank"> -->
+                                        <form action="<?= base_url(); ?>process/skk_print.php" method="post" target="_blank">
+
+                                            <td class="text-center">
+
+                                                <input type="text" value="<?= $row['iduser']; ?>" name="id_user" hidden>
+
+                                                <button type="submit" class='btn btn-flat btn-dark btn-sm' name="print_user" onclick="submit(<?= $row['iduser']; ?>)">
+
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer-fill" viewBox="0 0 16 16">
+                                                        <path d="M5 1a2 2 0 0 0-2 2v1h10V3a2 2 0 0 0-2-2zm6 8H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1" />
+                                                        <path d="M0 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v-2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2H2a2 2 0 0 1-2-2zm2.5 1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
+                                                    </svg>
+
+
+                                                    </a>
+                                            </td>
+                                        </form>
+
 
 
 
@@ -346,6 +395,13 @@
                     <input type="hidden" name="iduser" class="form-control">
                     <input type="hidden" name="approval_name" value="<?= strtoupper($_SESSION['nama']); ?>" class="form-control">
 
+                    <!-- waktu approve -->
+                    <input type="datetime-local" name="wkt_apv_ats" value="" class="form-control" id="datetime" hidden>
+                    <input type="datetime-local" name="wkt_apv_ga" value="" class="form-control" id="datetime2" hidden>
+                    <input type="datetime-local" name="wkt_apv_hos" value="" class="form-control" id="datetime3" hidden>
+                    <input type="datetime-local" name="wkt_apv_hos" value="" class="form-control" id="datetime4" hidden>
+                    <!--  -->
+
 
                     <div class="row">
                         <div class="col col-6">
@@ -367,6 +423,16 @@
                                 </div>
                             </li>
                         </div>
+                        <!-- <div class="col col-6">
+                            <label for="">test</label>
+
+                            <li class="list-group-item ">
+                                <div class="input-group">
+                                    <input type="text" class="form-control border-0" name="test" value="testing" readonly>
+
+                                </div>
+                            </li>
+                        </div> -->
                     </div>
 
                     <?php if (strtoupper($_SESSION['lvl_skk']) == "GA") : ?>
@@ -471,7 +537,7 @@
                     <li class="list-group-item">
                         <div class="input-group">
 
-                            <input type="text" class="form-control border-0" name="cttn_atasan" id="cttn_atasan">
+                            <input type="text" class="form-control border-0" name="catatan" id="cttn_atasan">
                         </div>
                     </li>
 
@@ -481,7 +547,7 @@
                 <div class="modal-footer text-center">
 
                     <!-- <input type="submit" class="btn btn-danger" placeholder="test" data-bs-dismiss="modal"> -->
-                    <input class="btn btn-success float-right" type="submit" name="appv_atasan">
+                    <input class="btn btn-success float-right" type="submit" name="update">
 
                 </div>
 

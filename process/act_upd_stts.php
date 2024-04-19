@@ -7,169 +7,116 @@ include('../config/function.php');
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-
 require_once "library/PHPMailer.php";
 require_once "library/Exception.php";
 require_once "library/OAuth.php";
 require_once "library/POP3.php";
 require_once "library/SMTP.php";
 
+// Telegram Bot API Token
+$botToken = "6527284022:AAE6GMSqxpDC4NW4d-1bIRBnRazUE46vXvo";
 
-//Email dari atasan ke bawahan..
-if (isset($_POST['appv_atasan'])) {
-    $id = $_POST['idbarang'];
+// Chat ID of the recipient
+$chatID = "-4101873678";
+
+// Inisialisasi variabel
+$success = '';
+$error = '';
+
+if (isset($_POST['update'])) {
+    $id = $_POST['iduser'];
     $status = $_POST['status'];
-    $tggl = $_POST['tggl'];
-    $nama_drone = $_POST['nama_drone'];
-    $nama = $_POST['nama'];
-    $cttn_atasan = $_POST['cttn_atasan'];
+    $wkt_apv_ats = date('Y-m-d H:i:s');
+    $catatan = $_POST['catatan'];
 
-    //untuk update di table departement terkait
-    $update = mysqli_query($con, "UPDATE drone_rtk SET status='$status', cttn_atasan='$cttn_atasan' WHERE idbarang='$id'") or die("Error: " . mysqli_error($con));
-
-    if ($update) {
-        $success = 'Berhasil mengubah data P2H';
-    } else {
-        $error = 'Gagal mengubah data P2H';
-    }
-    $_SESSION['success'] = $success;
-    $_SESSION['error'] = $error;
-
-
-    // email
-
+    // Update data
     $mail = new PHPMailer;
 
-
-
-    //Enable SMTP debugging. 
-
-    $mail->SMTPDebug = 3;
-
     //Set PHPMailer to use SMTP.
-
     $mail->isSMTP();
 
     //Set SMTP host name                          
-
     $mail->Host = "smtp.gmail.com"; //host mail server
-
 
     $mail->SMTPAuth = true;
 
     //Provide username and password     
-    $mail->Username = "sebuku.itc@gmail.com";   //nama-email smtp          
+    $mail->Username = "sebuku.itc@gmail.com"; //nama-email smtp          
 
-
-    //$mail->Password = "vifeifksikzqnitf";           //password email smtp
-    // $mail->Password = "crclkejjaqlpwjyk";           //password email smtp
-    $mail->Password = "ujericenolqutmev";           //password email smtp
+    $mail->Password = "cqeargqaavjrkufn"; //password email smtp
 
     $mail->SMTPSecure = "ssl";
 
     //Set TCP port to connect to 
-
     $mail->Port = 465;
-    //$mail->Port = 26;                                                    
-
-
 
     $mail->From = "sebuku.itc@gmail.com"; //email pengirim
 
-    $mail->FromName = "System IT Employee (P2H-Drone RTK)"; //nama pengirim
-
-
-    // $mail->addBCC('abelardpangalila@gmail.com');
+    $mail->FromName = "System IT Employee (Sistem SKK)"; //nama pengirim
 
     $mail->addBCC('abelard.pangalila@sebukucoalgroup.co.id');
 
-
     $mail->isHTML(true);
 
+    $mail->Subject = "Approve Atasan Sistem SKK"; //subject
 
+    // Isi email
+    $mail->Body = "Review Surat Keluar\n\nStatus: $status\n\nWaktu Approved: $wkt_apv_ats"; //isi email
 
-    $mail->Subject = "Review Atasan P2H Unit Drone RTK"; //subject
-
-    $Body = "
-
-    <table class='table'>
-
-    <tr> 
-    
-        <td colspan='3'><h4><u><font color='green'>Detail Laporan</font></u></h4></td>
-    
-    </tr>
-    
-    
-    <tr>
-    
-        <td><b>Nama Anggota</b></td><td>:</td><td>$nama</td>
-    
-    </tr>
-
-    <tr>
-    
-        <td><b>Status</b></td><td>:</td><td>$status</td>
-    
-    </tr>
-    
-    <tr>
-    
-        <td><b>Nama Drone RTK</b></td><td>:</td><td>$nama_drone</td>
-    
-    </tr>
-   
-    <tr>
-    
-        <td><b>Waktu Input</b></td><td>:</td><td>$tggl</td>
-    
-    </tr>
-    <tr>
-    
-        <td><b>Note Atasan</b></td><td>:</td><td>$cttn_atasan</td>
-    
-    </tr>
-    
-   
-    
-    </table>  <br>
-    
-<br><br>
-
-            Note : Jika status approved maka unit bisa digunakan, tapi jika gagal maka unit tidak bisa digunakan. <br>
-
-            <br>
-            <br>-------------------------------------<br>
-            Perhatian :<br>
-            Email ini dihasilkan secara otomatis oleh sistem dan bersifat informasi,<br>
-            dimohon untuk tidak membalas email ini.<br>
-
-
-            <br>Terima kasih.<br>
-
-            <br>
-
-            Best Regards,<br>
-
-            System IT Employee (P2H)
-
-
-
-    ";
-
-    $mail->Body    = $Body; //isi email
-
-    $mail->IsHTML(true);
-
-    $mail->AltBody = "PHP mailer"; //body email (optional)
-
+    // Kirim email
     if (!$mail->send()) {
+        $error = 'Gagal mengirim email: ' . $mail->ErrorInfo; // Menampilkan informasi kesalahan email
     } else {
+        // Kirim notifikasi ke Telegram
+        $message = "<b>Review Surat Keluar</b>\n\n" .
+            "<b>Status:</b> $status\n\n" .
+            "<b>Waktu Approved:</b> $wkt_apv_ats\n\n";
+
+        // API URL
+        $apiURL = "https://api.telegram.org/bot$botToken/sendMessage";
+
+        // Data to be sent
+        $data = array(
+            'chat_id' => $chatID,
+            'text' => $message,
+            'parse_mode' => 'HTML' // Menetapkan mode parse sebagai HTML
+        );
+
+        // Initialize cURL
+        $ch = curl_init();
+
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_URL, $apiURL);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // Execute cURL
+        $result = curl_exec($ch);
+
+        // Close cURL
+        curl_close($ch);
+
+        // Output result
+        if ($result) {
+            $success = "Notifikasi berhasil dikirim!";
+
+            // Setelah berhasil mengirim email dan notifikasi, barulah jalankan query UPDATE
+            $upd = mysqli_query($con, "UPDATE tbl_skk SET wkt_apv_ats='$wkt_apv_ats', status='$status', catatan='$catatan' WHERE iduser='$id'") or die("Error: " . mysqli_error($con));
+            if ($upd) {
+                $success = 'Berhasil mengubah data P2H';
+            } else {
+                $error = 'Gagal mengubah data P2H: ' . mysqli_error($con); // Menampilkan informasi kesalahan query SQL
+            }
+        } else {
+            $error = "Gagal mengirim notifikasi: " . curl_error($ch); // Menampilkan informasi kesalahan cURL
+        }
     }
 
-    // end of email
-    header('Location:../?r_drone_rtk');
+    // Simpan pesan kesalahan atau keberhasilan ke dalam session
+    $_SESSION['success'] = $success;
+    $_SESSION['error'] = $error;
+
+    // Redirect ke halaman sebelumnya
+    header('Location:../?r_skk');
 }
-
-
-// $update = mysqli_query($con, "UPDATE drone_rtk SET status='$status', cttn_atasan='$cttn_atasan' WHERE idbarang='$id'") or die("Error: " . mysqli_error($con));

@@ -90,11 +90,102 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
+<!-- script untuk datetime di modal report -->
+
+<!-- <script>
+    // Mendapatkan elemen input datetime
+    var datetimeInput = document.getElementById('datetime');
+
+    // Mendapatkan tanggal dan jam saat ini
+    var sekarang = new Date();
+
+    // Format tanggal menjadi YYYY-MM-DD
+    var tahun = sekarang.getFullYear();
+    var bulan = (sekarang.getMonth() + 1).toString().padStart(2, '0');
+    var tanggal = sekarang.getDate().toString().padStart(2, '0');
+
+    // Format jam menjadi HH:MM
+    var jam = sekarang.getHours().toString().padStart(2, '0');
+    var menit = sekarang.getMinutes().toString().padStart(2, '0');
+
+    // Gabungkan tanggal dan jam
+    var datetimeFormatted = tahun + '-' + bulan + '-' + tanggal + 'T' + jam + ':' + menit;
+
+    // Set nilai elemen input
+    datetimeInput.value = datetimeFormatted;
+</script>
+
+<script>
+    // Mendapatkan elemen input datetime
+    var datetimeInput = document.getElementById('datetime2');
+
+    // Mendapatkan tanggal dan jam saat ini
+    var sekarang = new Date();
+
+    // Format tanggal menjadi YYYY-MM-DD
+    var tahun = sekarang.getFullYear();
+    var bulan = (sekarang.getMonth() + 1).toString().padStart(2, '0');
+    var tanggal = sekarang.getDate().toString().padStart(2, '0');
+
+    // Format jam menjadi HH:MM
+    var jam = sekarang.getHours().toString().padStart(2, '0');
+    var menit = sekarang.getMinutes().toString().padStart(2, '0');
+
+    // Gabungkan tanggal dan jam
+    var datetimeFormatted = tahun + '-' + bulan + '-' + tanggal + 'T' + jam + ':' + menit;
+
+    // Set nilai elemen input
+    datetimeInput.value = datetimeFormatted;
+</script>
+
+<script>
+    // Mendapatkan elemen input datetime
+    var datetimeInput = document.getElementById('datetime3');
+
+    // Mendapatkan tanggal dan jam saat ini
+    var sekarang = new Date();
+
+    // Format tanggal menjadi YYYY-MM-DD
+    var tahun = sekarang.getFullYear();
+    var bulan = (sekarang.getMonth() + 1).toString().padStart(2, '0');
+    var tanggal = sekarang.getDate().toString().padStart(2, '0');
+
+    // Format jam menjadi HH:MM
+    var jam = sekarang.getHours().toString().padStart(2, '0');
+    var menit = sekarang.getMinutes().toString().padStart(2, '0');
+
+    // Gabungkan tanggal dan jam
+    var datetimeFormatted = tahun + '-' + bulan + '-' + tanggal + 'T' + jam + ':' + menit;
+
+    // Set nilai elemen input
+    datetimeInput.value = datetimeFormatted;
+</script>
+
+<script>
+    // Mendapatkan elemen input datetime
+    var datetimeInput = document.getElementById('datetime4');
+
+    // Mendapatkan tanggal dan jam saat ini
+    var sekarang = new Date();
+
+    // Format tanggal menjadi YYYY-MM-DD
+    var tahun = sekarang.getFullYear();
+    var bulan = (sekarang.getMonth() + 1).toString().padStart(2, '0');
+    var tanggal = sekarang.getDate().toString().padStart(2, '0');
+
+    // Format jam menjadi HH:MM
+    var jam = sekarang.getHours().toString().padStart(2, '0');
+    var menit = sekarang.getMinutes().toString().padStart(2, '0');
+
+    // Gabungkan tanggal dan jam
+    var datetimeFormatted = tahun + '-' + bulan + '-' + tanggal + 'T' + jam + ':' + menit;
+
+    // Set nilai elemen input
+    datetimeInput.value = datetimeFormatted;
+</script> -->
 
 
-
-
-<!-- End Of Chart JS -->
+<!-- end of datetime -->
 
 
 
