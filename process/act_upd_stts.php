@@ -23,10 +23,10 @@ $chatID = "-4101873678";
 $success = '';
 $error = '';
 
-if (isset($_POST['update'])) {
+if (isset($_POST['update_stts_skk'])) {
     $id = $_POST['iduser'];
     $status = $_POST['status'];
-    $wkt_apv_ats = date('Y-m-d H:i:s');
+    $wkt_apv_ats = date('Y-m-d');
     $catatan = $_POST['catatan'];
 
     // Update data
@@ -75,33 +75,33 @@ if (isset($_POST['update'])) {
         // API URL
         $apiURL = "https://api.telegram.org/bot$botToken/sendMessage";
 
-        // Data to be sent
+      
         $data = array(
             'chat_id' => $chatID,
             'text' => $message,
-            'parse_mode' => 'HTML' // Menetapkan mode parse sebagai HTML
+            'parse_mode' => 'HTML' 
         );
 
-        // Initialize cURL
+       
         $ch = curl_init();
 
-        // Set cURL options
+        
         curl_setopt($ch, CURLOPT_URL, $apiURL);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-        // Execute cURL
+      
         $result = curl_exec($ch);
 
-        // Close cURL
+        
         curl_close($ch);
 
         // Output result
         if ($result) {
             $success = "Notifikasi berhasil dikirim!";
 
-            // Setelah berhasil mengirim email dan notifikasi, barulah jalankan query UPDATE
+            // update kedalam database
             $upd = mysqli_query($con, "UPDATE tbl_skk SET wkt_apv_ats='$wkt_apv_ats', status='$status', catatan='$catatan' WHERE iduser='$id'") or die("Error: " . mysqli_error($con));
             if ($upd) {
                 $success = 'Berhasil mengubah data P2H';

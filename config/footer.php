@@ -92,7 +92,7 @@
 
 <!-- script untuk datetime di modal report -->
 
-<!-- <script>
+<script>
     // Mendapatkan elemen input datetime
     var datetimeInput = document.getElementById('datetime');
 
@@ -182,7 +182,30 @@
 
     // Set nilai elemen input
     datetimeInput.value = datetimeFormatted;
-</script> -->
+</script>
+
+<script>
+    // Fungsi untuk menampilkan modal
+function showModal() {
+  var modal = document.getElementById("modal");
+  modal.style.display = "block";
+}
+
+// Fungsi untuk menyembunyikan modal
+function hideModal() {
+  var modal = document.getElementById("modal");
+  modal.style.display = "none";
+}
+
+// Event listener untuk tombol cetak
+document.querySelector('[name="printButton"]').addEventListener("click", function() {
+  showModal();
+  window.print(); // Cetak saat tombol cetak ditekan
+  hideModal(); // Sembunyikan modal setelah pencetakan selesai
+});
+
+
+</script>
 
 
 <!-- end of datetime -->

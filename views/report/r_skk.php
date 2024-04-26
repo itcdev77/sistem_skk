@@ -4,11 +4,16 @@
 
 <script>
     function submit(x) {
+
+        
+
         if (x == 'add') {
             // kosong
 
 
         } else {
+
+            
             $('#detailModal .modal-title').html('#');
 
 
@@ -23,7 +28,7 @@
 
 
             $('[name="tambah"]').hide();
-            $('[name="update"]').show();
+            $('[name="ubah"]').show();
 
             $.ajax({
                 type: "POST",
@@ -36,7 +41,7 @@
 
                     // var running_number = data.no_surat + 4;
 
-                    $('[name="iduser "]').val(data.iduser);
+                    $('[name="iduser"]').val(data.iduser);
                     $('[name="nama_pengemudi"]').val(data.nama_pengemudi);
                     $('[name="tggl_berangkat"]').val(data.tggl_berangkat);
                     $('[name="no_surat"]').val(data.no_surat);
@@ -78,6 +83,7 @@
 
     <!-- DataTales Example -->
 
+    <button id="">Print Modal</button>
 
     <form action="<?= base_url(); ?>/process/ex_total_station.php" method="post" target="_blank">
         <div class="row">
@@ -242,10 +248,23 @@
 
                                         <?php endif; ?>
 
+                                        
+                                        <td class="text-center"><button class="btn btn-flat btn-dark btn-sm" name="printButton" href="#modal_test" data-toggle="modal" onclick="showModal(<?= $row['iduser']; ?>)">
+                                        
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer-fill" viewBox="0 0 16 16">
+                                                            <path d="M5 1a2 2 0 0 0-2 2v1h10V3a2 2 0 0 0-2-2zm6 8H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1" />
+                                                            <path d="M0 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v-2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2H2a2 2 0 0 1-2-2zm2.5 1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
+                                            </svg>
+                                        
+                                        </button></td>
+                                        <!-- <td>
+                                       <button id="printButton">Print Modal</button></td> -->
+
+
 
                                         <!-- page untuk cetak barang -->
                                         <!-- <form action="<?= base_url(); ?>process/skk_print.php?id=<?= $_SESSION['iduser']; ?>" method="post" target="_blank"> -->
-                                        <form action="<?= base_url(); ?>process/skk_print.php" method="post" target="_blank">
+                                        <!-- <form action="<?= base_url(); ?>process/skk_print.php" method="post" target="_blank">
 
                                             <td class="text-center">
 
@@ -261,7 +280,7 @@
 
                                                     </a>
                                             </td>
-                                        </form>
+                                        </form> -->
 
 
 
@@ -349,6 +368,16 @@
 
                                         <?php endif; ?>
 
+                                        <!-- button untuk print basah form SKK -->
+                                        <td class="text-center"><button class="btn btn-flat btn-dark btn-sm" name="printButton" href="#modal_test" data-toggle="modal" onclick="showModal(<?= $row['iduser']; ?>)">
+                                        
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer-fill" viewBox="0 0 16 16">
+                                                            <path d="M5 1a2 2 0 0 0-2 2v1h10V3a2 2 0 0 0-2-2zm6 8H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1" />
+                                                            <path d="M0 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v-2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2H2a2 2 0 0 1-2-2zm2.5 1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
+                                            </svg>
+                                        
+                                        </button></td>
+
 
 
                                     </tr>
@@ -377,6 +406,70 @@
 
 <!-- Modal -->
 
+<div id="modal" class="modal_test">
+<div class="modal-content">
+            <form action="<?= base_url(); ?>process/act_upd_stts.php" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <!-- <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button> -->
+                </div>
+                <!-- modal body -->
+                <div class="modal-body">
+
+                    <input type="hidden" name="iduser" class="form-control">
+                    <input type="hidden" name="approval_name" value="<?= strtoupper($_SESSION['nama']); ?>" class="form-control">
+
+                    <!-- waktu approve -->
+                    <!-- <input type="datetime-local" name="wkt_apv_ats" value="" class="form-control" id="datetime" hidden>
+                    <input type="datetime-local" name="wkt_apv_ga" value="" class="form-control" id="datetime2" hidden>
+                    <input type="datetime-local" name="wkt_apv_hos" value="" class="form-control" id="datetime3" hidden>
+                    <input type="datetime-local" name="wkt_apv_hos" value="" class="form-control" id="datetime4" hidden> -->
+                    <!--  -->
+                     <center>
+                            <table>
+                                <tr>
+                                <td><img src="http://employee.sebukucoalgroup.com/p2h-survey/assets/img/Logo%20Sebuku.png" width="190" height="130"></td>
+
+                                    <td>
+                                        <center>
+                                            <p style="font-size:30px;">SEBUKU COAL GROUP</p>
+                                            SISTEM SURAT KELUAR KENDARAAN
+                                        </center>
+                                </tr>
+                            </table><br>
+                            <table>
+                                <tr>
+                                    <td style="width: 170mm;">
+                                        <hr>
+                                        <b>
+                                            <center>FORMULIR SURAT KELUAR KENDARAAN<center>
+                                        </b>
+                                        <hr>
+                                    </td>
+                                </tr>
+                    </table>
+
+                    </center>
+
+                    
+
+
+
+                 
+
+
+                </div>
+
+
+            </form>
+        </div>
+</div>
+
+
+
+<!--  -->
 <!-- modal approval atasan -->
 
 <div class="modal fade" id="approve_split" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
@@ -496,7 +589,7 @@
 
                             <!-- Approval untuk atasan -->
                             <?php if (strtoupper($_SESSION['lvl_skk']) != "GA" && strtoupper($_SESSION['lvl_skk']) != "HOS" && strtoupper($_SESSION['lvl_skk']) != "GARDA") : ?>
-                                <input class="form-check-input" type="radio" name="status" id="exampleRadios1" value="approve" checked>
+                                <input class="form-check-input" type="radio" name="status" id="exampleRadios1" value="approve_ats" checked>
                             <?php endif; ?>
                             <!--  -->
 
@@ -547,7 +640,7 @@
                 <div class="modal-footer text-center">
 
                     <!-- <input type="submit" class="btn btn-danger" placeholder="test" data-bs-dismiss="modal"> -->
-                    <input class="btn btn-success float-right" type="submit" name="update">
+                    <input class="btn btn-success float-right" type="submit" name="update_stts_skk">
 
                 </div>
 
